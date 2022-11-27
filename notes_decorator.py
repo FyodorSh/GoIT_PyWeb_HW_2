@@ -1,4 +1,4 @@
-def input_error(func):
+def input_error_notes(func):
     def wrapper(*args):
         try:
             return func(*args)

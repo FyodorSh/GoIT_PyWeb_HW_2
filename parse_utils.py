@@ -28,5 +28,3 @@ def find_command(wrong_command):
         return f'{wrong_command} is not found, maybe you mean these: {", ".join(similar_commands)}'
     else:
         return 'Wrong command'
-
-

@@ -2,13 +2,25 @@ import pickle
 import re
 from collections import UserDict
 from datetime import datetime
+from abc import abstractmethod, ABC
 
 
-class Field:
+class Field(ABC):
     def __init__(self, value):
-        self._value = None
-        self.value = value
+        self._value = value
 
+    @property
+    @abstractmethod
+    def value(self):
+        return self._value
+
+    @value.setter
+    @abstractmethod
+    def value(self, value):
+        self._value = value
+
+
+class Name(Field):
     @property
     def value(self):
         return self._value
@@ -18,12 +30,12 @@ class Field:
         self._value = value
 
 
-class Name(Field):
-    pass
-
-
 class Phone(Field):
-    @Field.value.setter
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
     def value(self, value):
 
         if not value.isnumeric():
@@ -35,36 +47,48 @@ class Phone(Field):
         if len(value) != 12:
             raise ValueError("Перевірте довжину номера")
 
-        self._value = value
+        self.value = value
 
 
 class Email(Field):
-    @Field.value.setter
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
     def value(self, value):
         if not re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$", value):
             raise ValueError("Перевірте вірність вводу email")
 
-        self._value = value
+        self.value = value
 
 
 class Address(Field):
-    @Field.value.setter
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
     def value(self, value):
         if not value:
             raise ValueError("Настільки короткої адреси існувати не може")
 
-        self._value = value
+        self.value = value
 
 
 class Birthday(Field):
-    @Field.value.setter
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
     def value(self, value):
         today = datetime.now().date()
         birthday = datetime.strptime(value, "%Y-%m-%d").date()
         if birthday > today:
             raise ValueError("Помилкова дата дня народження")
 
-        self._value = value
+        self.value = value
 
 
 class Record:

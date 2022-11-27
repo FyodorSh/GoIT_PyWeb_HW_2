@@ -1,5 +1,4 @@
-from classes import address_book
-from notes import user_notes
+from commands import bot
 from parse_utils import parse_input
 
 
@@ -12,8 +11,7 @@ def main():
             if result == 'good bye':
                 break
     finally:
-        address_book.save_contacts_to_file()
-        user_notes.save_notes_to_file()
+        bot.save_data()
 
 
 if __name__ == "__main__":
