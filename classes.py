@@ -5,37 +5,38 @@ from datetime import datetime
 from abc import abstractmethod, ABC
 
 
-class Field(ABC):
+class IField(ABC):
+    @property
+    @abstractmethod
+    def value(self):
+        pass
+
+    @value.setter
+    @abstractmethod
+    def value(self, value):
+        pass
+
+
+class Field(IField):
     def __init__(self, value):
         self._value = value
 
     @property
-    @abstractmethod
     def value(self):
         return self._value
 
     @value.setter
-    @abstractmethod
     def value(self, value):
         self._value = value
 
 
 class Name(Field):
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        self._value = value
+    pass
 
 
 class Phone(Field):
-    @property
-    def value(self):
-        return self._value
 
-    @value.setter
+    @Field.value.setter
     def value(self, value):
 
         if not value.isnumeric():
@@ -51,11 +52,8 @@ class Phone(Field):
 
 
 class Email(Field):
-    @property
-    def value(self):
-        return self._value
 
-    @value.setter
+    @Field.value.setter
     def value(self, value):
         if not re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$", value):
             raise ValueError("Перевірте вірність вводу email")
@@ -64,11 +62,8 @@ class Email(Field):
 
 
 class Address(Field):
-    @property
-    def value(self):
-        return self._value
 
-    @value.setter
+    @Field.value.setter
     def value(self, value):
         if not value:
             raise ValueError("Настільки короткої адреси існувати не може")
@@ -77,11 +72,8 @@ class Address(Field):
 
 
 class Birthday(Field):
-    @property
-    def value(self):
-        return self._value
 
-    @value.setter
+    @Field.value.setter
     def value(self, value):
         today = datetime.now().date()
         birthday = datetime.strptime(value, "%Y-%m-%d").date()

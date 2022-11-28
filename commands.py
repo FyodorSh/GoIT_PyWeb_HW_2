@@ -3,10 +3,123 @@ from decorator import input_error
 from sort_files import run_sorting
 from notes import Notes
 from notes_decorator import input_error_notes
+from abc import abstractmethod, ABC
 
 
-class Bot:
-    def __init__(self, address_book, notes):
+class IBot(ABC):
+
+    @staticmethod
+    @abstractmethod
+    def get_help():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def exit_function():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def hello_function():
+        pass
+
+    @abstractmethod
+    def add_record(self, data):
+        pass
+
+    @abstractmethod
+    def add_phone_func(self, data):
+        pass
+
+    @abstractmethod
+    def change_phone(self, data):
+        pass
+
+    @abstractmethod
+    def delete_phone(self, data):
+        pass
+
+    @abstractmethod
+    def search_function(self, value):
+        pass
+
+    @abstractmethod
+    def show_function(self):
+        pass
+
+    @abstractmethod
+    def birthday_func(self, data):
+        pass
+
+    @abstractmethod
+    def next_birthday_func(self, name):
+        pass
+
+    @abstractmethod
+    def search_birthday_func(self, value):
+        pass
+
+    @abstractmethod
+    def address_func(self, data):
+        pass
+
+    @abstractmethod
+    def email_func(self, data):
+        pass
+
+    @abstractmethod
+    def del_record(self, name):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def folder_sorting(path_to_folder):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def print_note(key, value):
+        pass
+
+    @abstractmethod
+    def add_note(self, data):
+        pass
+
+    @abstractmethod
+    def show_notes(self):
+        pass
+
+    @abstractmethod
+    def add_tags(self, data):
+        pass
+
+    @abstractmethod
+    def delete_note(self, data):
+        pass
+
+    @abstractmethod
+    def edit_note(self, data):
+        pass
+
+    @abstractmethod
+    def search_notes(self, data):
+        pass
+
+    @abstractmethod
+    def search_notes_by_tags(self, data):
+        pass
+
+    @abstractmethod
+    def sort_notes(self):
+        pass
+
+    @abstractmethod
+    def save_data(self):
+        pass
+
+
+class Bot(IBot):
+    def __init__(self, address_book: AddressBook, notes: Notes):
         self.address_book = address_book
         self.notes = notes
 
@@ -39,18 +152,18 @@ class Bot:
         '''
         return instruction
 
-    @input_error
-    def exit_function(self):
+    @staticmethod
+    def exit_function():
         """Function for close program"""
         return "good bye"
 
-    @input_error
-    def hello_function(self):
+    @staticmethod
+    def hello_function():
         return 'How can i help you?'
 
     @input_error
     def add_record(self, data: str) -> str:
-        name, *phones = data.split(' ')
+        name, *phones = data.strip().split(' ')
         if name in self.address_book:
             raise ValueError('This contact already exist.')
         record = Record(name)
@@ -63,21 +176,21 @@ class Bot:
 
     @input_error
     def add_phone_func(self, data: str) -> str:
-        name, phone = data.split(" ", 1)
+        name, phone = data.strip().split(' ', 1)
         record = self.address_book[name]
         record.add_phone(phone)
         return 'You added phone'
 
     @input_error
     def change_phone(self, data: str) -> str:
-        name, *phones = data.split(' ')
+        name, *phones = data.strip().split(' ')
         record = self.address_book[name]
         record.change_phones(phones)
         return 'You changed phones.'
 
     @input_error
     def delete_phone(self, data: str) -> str:
-        name, phone = data.split(' ', 1)
+        name, phone = data.strip().split(' ', 1)
 
         record = self.address_book[name]
         if record.delete_phone(phone):
@@ -208,7 +321,7 @@ class Bot:
         return result
 
     @input_error_notes
-    def search_notes_by_tags(self, data):
+    def search_notes_by_tags(self, data: str) -> str:
         tags = data.split(" ")
 
         search_results = self.notes.search_notes_by_tags(tags)
@@ -236,5 +349,6 @@ class Bot:
     def save_data(self) -> None:
         self.address_book.save_contacts_to_file()
         self.notes.save_notes_to_file()
+
 
 bot = Bot(AddressBook(), Notes())
