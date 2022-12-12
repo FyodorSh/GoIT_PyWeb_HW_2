@@ -276,7 +276,7 @@ class Bot(IBot):
         return result
 
     @input_error_notes
-    def add_note(self, data):
+    def add_note(self, data: str):
         note_text = data
         self.notes.add_note(note_text)
         return "New note added"
@@ -291,7 +291,6 @@ class Bot(IBot):
     @input_error_notes
     def add_tags(self, data: str) -> str:
         note_id, *tags = data.split(" ")
-
         if not tags:
             return "There are no tags in your input"
         self.notes.add_tags(int(note_id), tags)

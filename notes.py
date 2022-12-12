@@ -2,7 +2,7 @@ import pickle
 
 
 class Note:
-    def __init__(self, note_text):
+    def __init__(self, note_text: str):
         self.note_text = note_text
         self.note_tags = set()
 
@@ -14,35 +14,35 @@ class Notes:
         self.notes = {}
         self.load_notes_from_file()
 
-    def add_note(self, note_text):
+    def add_note(self, note_text: str):
         self.notes[self.notes_iter] = Note(note_text)
         self.notes_iter += 1
 
-    def delete_note(self, note_id):
+    def delete_note(self, note_id: int):
         self.notes.pop(note_id)
 
     def get_notes(self):
         for key, value in self.notes.items():
             yield key, value
 
-    def add_tags(self, note_id, tags):
+    def add_tags(self, note_id: int, tags: list):
         for tag in tags:
             self.notes[note_id].note_tags.add(tag)
 
-    def note_exist_by_id(self, note_id):
+    def note_exist_by_id(self, note_id: int):
         return note_id in self.notes
 
-    def edit_note(self, note_id, new_note_text):
+    def edit_note(self, note_id: int, new_note_text: str):
         self.notes[note_id].note_text = new_note_text
 
-    def search_notes(self, search_text):
+    def search_notes(self, search_text: str):
         search_result = {}
         for key, value in self.notes.items():
             if search_text in value.note_text:
                 search_result[key] = value
         return search_result
 
-    def search_notes_by_tags(self, tags):
+    def search_notes_by_tags(self, tags: list):
         search_result = {}
         for key, value in self.notes.items():
             for tag in tags:
